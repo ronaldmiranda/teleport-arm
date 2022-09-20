@@ -32,7 +32,7 @@ jobs:
         uses: docker/setup-buildx-action@v2
       - name: Build and push image
         run: |
-          VERSION=$(cat version) docker buildx build --platform linux/arm64 ronaldmiranda/teleport-arm:$VERSION --build-arg version=$VERSION --build-arg arch=arm64
+          VERSION=$(cat version) && docker buildx build --platform linux/arm64 ronaldmiranda/teleport-arm:$VERSION --build-arg version=$VERSION --build-arg arch=arm64
       - name: Commit latest release version
         if: steps.git-check.outputs.modified == 'true'
         run: |
