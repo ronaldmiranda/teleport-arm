@@ -22,7 +22,7 @@ jobs:
       - name: Fetch release version
         run: |
           curl -sL https://api.github.com/repos/gravitational/teleport/releases/latest |
-          jq -r ".tag_name" > version
+          jq -r ".tag_name | .[1:10]" > version
       - name: Check for modified files
         id: git-check
         run: echo ::set-output name=modified::$([ -z "`git status --porcelain`" ] && echo "false" || echo "true")
@@ -32,7 +32,7 @@ jobs:
         uses: docker/setup-buildx-action@v2
       - name: Build and push image
         run: |
-          VERSION=${$(cat version)#?} && docker buildx build --platform linux/arm64 -t ronaldmiranda/teleport-arm:$VERSION --build-arg version=$VERSION --build-arg arch=arm64 .
+          VERSION=$(cat version) && docker buildx build --platform linux/arm64 -t ronaldmiranda/teleport-arm:$VERSION --build-arg version=$VERSION --build-arg arch=arm64 .
       - name: Commit latest release version
         if: steps.git-check.outputs.modified == 'true'
         run: |
