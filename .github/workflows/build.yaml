@@ -1,7 +1,17 @@
 name: Get latest release version
 on:
-  schedule:
-    - cron: "* * * * *"
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: "Log level"
+        required: true
+        default: "warning"
+        type: choice
+        options:
+          - info
+          - warning
+          - debug
+
 jobs:
   get-version:
     runs-on: ubuntu-latest
